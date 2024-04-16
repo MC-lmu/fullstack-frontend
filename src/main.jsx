@@ -16,6 +16,8 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import Root from './routes/root';
+import ProjectsListPage, { loader as projectsListLoader } from './routes/projects/projects_list';
+import ProjectPage, { loader as projectLoader } from './routes/projects/project';
 import LandingPage from './routes/landing';
 import ErrorPage from './error-page';
 
@@ -29,6 +31,16 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
           { index: true, element: <LandingPage /> },
+          {
+            path: '/project/:id',
+            element: <ProjectPage />,
+            loader: projectLoader
+          },
+          {
+            path: '/projects',
+            element: <ProjectsListPage />,
+            loader: projectsListLoader,
+          }
         ]
       }
     ]
