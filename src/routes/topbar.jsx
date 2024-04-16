@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
 import Slide from '@mui/material/Slide';
 import Menu from '@mui/material/Menu';
 
@@ -11,7 +13,11 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
 
 import PropTypes from 'prop-types';
+
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import theme from '../mui-theme';
 
 function HideOnScroll({ children }) {
   const trigger = useScrollTrigger();
@@ -47,18 +53,23 @@ export default function Topbar(props) {
     <HideOnScroll {...props}>
       <AppBar
         position='sticky'
-        maxWidth='100%'
         color='secondary'
         enableColorOnDark
       >
-        <Toolbar>
-          <Typography variant='h4' component='div' sx={{ flexGrow: 1 }}>
+        <Toolbar sx={{ display: 'flex' }}>
+          <Link to='/' style={theme.typography.h3}>
             Portfolio
-          </Typography>
+          </Link>
+          {/* TODO: switch to tabs */}
+          <Button component={Link} to='/projects' sx={{ ml: 'auto' }}>
+            Projets
+          </Button>
+
           {/* TODO: add navigation items */}
           {!loggedIn && (
             <IconButton
               size='large'
+              sx={{ ml: 'auto' }}
               onClick={navigateToLoginPage}
             >
               <LoginIcon />
@@ -68,6 +79,7 @@ export default function Topbar(props) {
           {loggedIn && (
             <IconButton
               size='large'
+              sx={{ ml: 'auto' }}
               onClick={openAccountMenu}
             >
               <AccountCircle />
