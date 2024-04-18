@@ -7,6 +7,8 @@ import {
   Grid,
   IconButton,
   Typography,
+
+  Button
 } from '@mui/material';
 
 import MenuBookIcon from '@mui/icons-material/MenuBook';
@@ -26,6 +28,9 @@ export default function ProjectList() {
   const { projects } = useLoaderData();
   return projects.length ? (
     <Grid container>
+      <Button component={Link} to='/project/edit/new'>
+        DEBUG: create project
+      </Button>
       {projects.map((project) => (
         <Card
           key={`project_${project.id}`}
@@ -35,7 +40,7 @@ export default function ProjectList() {
             component='img'
             sx={{ maxWidth: 256, maxHeight: 100,  }}
             image="/gcph1024.png"
-            alt={`Photo du projet: ${project.title}`}
+            alt={`Photo du projet '${project.title}'`}
           />
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardContent>
@@ -53,7 +58,7 @@ export default function ProjectList() {
             </IconButton>
 
             {/* TODO: these should be shown only when logged in */}
-            <IconButton onClick={(e) => alert(e)}>
+            <IconButton component={Link} to={`/project/edit/${project.id}`}>
               <EditIcon />
             </IconButton>
             <IconButton onClick={(e) => alert(e)}>

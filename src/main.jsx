@@ -16,6 +16,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import Root from './routes/root';
+import ProjectEditionPage, { loader as projectEditLoader, action as projectEditAction } from './routes/projects/project_edition';
 import ProjectsListPage, { loader as projectsListLoader } from './routes/projects/projects_list';
 import ProjectPage, { loader as projectLoader } from './routes/projects/project';
 import LandingPage from './routes/landing';
@@ -32,15 +33,21 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <LandingPage /> },
           {
+            path: '/projects',
+            element: <ProjectsListPage />,
+            loader: projectsListLoader,
+          },
+          {
+            path: '/project/edit/:id',
+            element: <ProjectEditionPage />,
+            loader: projectEditLoader,
+            action: projectEditAction
+          },
+          {
             path: '/project/:id',
             element: <ProjectPage />,
             loader: projectLoader
           },
-          {
-            path: '/projects',
-            element: <ProjectsListPage />,
-            loader: projectsListLoader,
-          }
         ]
       }
     ]
