@@ -14,7 +14,7 @@ export default function ErrorPage() {
 
   return (
     <div id='error-page'>
-      <h1>Something went wrong...</h1>
+      <h1>An error occured.</h1>
       <h2><i>{errmsg}</i></h2>
     </div>
   );
