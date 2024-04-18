@@ -15,9 +15,11 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { getProjectsList } from '../../backend_service';
+import { deleteProject, getProjectsList } from '../../backend_service';
 import { Link, useLoaderData } from 'react-router-dom';
 import theme from '../../mui-theme';
+import { Form } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
 
 export async function loader() {
   const projects = await getProjectsList();
@@ -61,7 +63,13 @@ export default function ProjectList() {
             <IconButton component={Link} to={`/project/edit/${project.id}`}>
               <EditIcon />
             </IconButton>
-            <IconButton onClick={(e) => alert(e)}>
+            <IconButton onClick={(e) => {
+              if (window.confirm(
+                `Êtes-vous sûr de vouloir supprimer le projet ${project.title} ?`
+              )) {
+                deleteProject(project.id).then(window.location.reload());
+              }
+            }}>
               <DeleteIcon />
             </IconButton>
           </Box>
