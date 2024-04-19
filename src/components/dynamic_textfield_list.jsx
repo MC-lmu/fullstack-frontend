@@ -1,21 +1,30 @@
-import { useState } from 'react';
 import { Box, Button, IconButton, Stack, TextField, Typography } from '@mui/material';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import PropTypes from 'prop-types';
 
+export function unpackFormResults(formData, collectionFormPrefix, maxItemsCount) {
+  const res = [];
+  for (let i = 0; i < maxItemsCount; i++) {
+    const item = formData.get(`${collectionFormPrefix}_${i}`);
+    if (!item)
+      break;
+    res.push(item);
+  }
+  return res;
+}
+
 export default function DynamicTextfieldList({
+  itemList, setItemList,
+
   itemName,
   collectionName,
+  collectionFormPrefix,
   addItemButtonLabel,
-  itemFormPrefix,
   maxItemLength,
   maxItemsCount,
-  initialArrayContents
 }) {
-  const [itemList, setItemList] = useState(initialArrayContents);
-
   const assertLen = (s) =>
     (maxItemLength !== -1 && s.length > maxItemLength)
       ? `Ce champ ne peut dépasser ${maxItemLength} caractères.`
@@ -50,7 +59,7 @@ export default function DynamicTextfieldList({
               variant='standard'
               style={{ width: '85%'}}
               label={`${itemName} ${itemIndex+1}`}
-              name={`${itemFormPrefix}_${itemIndex}`}
+              name={`${collectionFormPrefix}_${itemIndex}`}
               value={itemValue}
               onChange={(e) => updateItem(itemIndex, e.target.value)}
               error={!!assertLen(itemValue)}
@@ -73,11 +82,12 @@ export default function DynamicTextfieldList({
 }
 
 DynamicTextfieldList.propTypes = {
+  itemList: PropTypes.array,
+  setItemList: PropTypes.func,
   itemName: PropTypes.string,
   collectionName: PropTypes.string,
   addItemButtonLabel: PropTypes.string,
-  itemFormPrefix: PropTypes.string,
+  collectionFormPrefix: PropTypes.string,
   maxItemLength: PropTypes.number,
-  maxItemsCount: PropTypes.number,
-  initialArrayContents: PropTypes.arrayOf(PropTypes.string)
+  maxItemsCount: PropTypes.number
 };

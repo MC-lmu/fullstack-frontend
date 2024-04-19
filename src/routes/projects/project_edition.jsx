@@ -1,12 +1,13 @@
 import { useLoaderData } from 'react-router-dom';
 import { createProject, getProjectDetails, updateProject } from '../../backend_service';
-import { Box, Button, IconButton, Stack, TextField } from '@mui/material';
+import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
 import { Form } from 'react-router-dom';
 
 import SaveIcon from '@mui/icons-material/Save';
 import { redirect } from 'react-router-dom';
-import DynamicTextfieldList from '../../components/dynamic_textfield_list';
+import DynamicTextfieldList, { unpackFormResults } from '../../components/dynamic_textfield_list';
+import Project from '../../components/project';
 
 const MAX_TITLE_LENGTH = 65; //characters
 const MAX_INTRO_LENGTH = 80; //characters
@@ -39,19 +40,15 @@ export async function action({ request, params }) {
   const method = request.method;
   const formData = await request.formData();
 
-  const keywords = [];
-  for (let i = 0; i < MAX_KEYWORDS_NUM; i++) {
-    const kw = formData.get(`keyword_${i}`);
-    if (!kw)
-      break;
-    keywords.push(kw);    
-  }
+  const keywords = unpackFormResults(formData, 'keyword', MAX_KEYWORDS_NUM);
+  const illust_img = unpackFormResults(formData, 'illust_img', MAX_ILLUST_NUM);
 
   const projectData = {
     'title': formData.get('title'),
     'short_description': formData.get('intro'),
     'full_description': formData.get('full_description'),
-    'keywords': keywords
+    'keywords': keywords,
+    'illustration_urls': illust_img,
   };
 
   if (method == 'POST') { /* Creating a new project */
@@ -88,9 +85,11 @@ export default function ProjectEditionPage() {
   const prj = unpackProjectDetails(creating, projectDetails);
 
   const [title, setTitle] = useState(prj.title);
-  const [intro, setIntro] = useState(prj.short_description);
-  const [fullDescription, setFullDescription] = useState(prj.full_description);
+  const [intro, setIntro] = useState(prj.intro);
+  const [fullDescription, setFullDescription] = useState(prj.description);
+  const [thumbnail, setThumbnail] = useState(prj.thumbnail_url);
   const [keywords, setKeywords] = useState(prj.keywords);
+  const [illustrations, setIllustrations] = useState(prj.illustration_urls ?? []);
 
   //TODO: prompt user before leaving page,
   //in order to avoid data losses
@@ -144,6 +143,18 @@ export default function ProjectEditionPage() {
             fullWidth
             margin='dense'
             variant='filled'
+            label='URL de la miniature du projet'
+            name='thumbnail_url'
+            value={thumbnail}
+            onChange={(e) => setThumbnail(e.target.value)}
+          />
+
+          <TextField
+            required
+            fullWidth
+            multiline
+            margin='dense'
+            variant='filled'
             label='Description complète du project'
             name='full_description'
             value={fullDescription}
@@ -152,23 +163,27 @@ export default function ProjectEditionPage() {
             onChange={(e) => setFullDescription(e.target.value)}
           />
 
-          <DynamicTextfieldList 
+          <DynamicTextfieldList
+            itemList={keywords}
+            setItemList={setKeywords}
             itemName='Mot-clé'
             collectionName='Mots-clés du project'
+            collectionFormPrefix='keyword'
             addItemButtonLabel='Ajouter un mot-clé'
-            itemFormPrefix='keyword'
-            maxItemLength={MAX_KEYWORD_LENGTH}
             maxItemsCount={MAX_KEYWORDS_NUM}
-            initialArrayContents={prj.keywords}
+            maxItemLength={MAX_KEYWORD_LENGTH}
           />
 
           <DynamicTextfieldList
+            itemList={illustrations}
+            setItemList={setIllustrations}
             itemName="URL de l'image"
             collectionName="Images d'illustration"
+            collectionFormPrefix='illust_img'
             addItemButtonLabel="Ajouter une image d'illustration"
             maxItemsCount={MAX_ILLUST_NUM}
             maxItemLength={-1}
-            initialArrayContents={[]}
+            initialArrayContents={prj.illustration_urls ?? []}
           />
 
           <br />
@@ -179,16 +194,17 @@ export default function ProjectEditionPage() {
           </Button>
         </Stack>
       </Form>
-      <br />
 
-      <hr width='0%' />
       <h1 style={{textAlign: 'center'}}>Aperçu en direct:</h1>
       <hr width='60%' />
-      <Box>
-        <h1 style={{textAlign: 'center'}}>{title}</h1>
-        <h2 style={{textAlign: 'center'}}><i>{intro}</i></h2>
-        <p>{fullDescription}</p>
-      </Box>
+      <Project
+        title={title}
+        intro={intro}
+        thumbnail={thumbnail}
+        description={fullDescription}
+        keywords={keywords}
+        illustrations={illustrations}
+      />
     </Box>
   );
 }

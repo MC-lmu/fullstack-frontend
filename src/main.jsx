@@ -18,7 +18,7 @@ import '@fontsource/roboto/700.css';
 import Root from './routes/root';
 import ProjectEditionPage, { loader as projectEditLoader, action as projectEditAction } from './routes/projects/project_edition';
 import ProjectsListPage, { loader as projectsListLoader } from './routes/projects/projects_list';
-import ProjectPage, { loader as projectLoader } from './routes/projects/project';
+import ProjectPage, { loader as projectLoader } from './routes/projects/project_page';
 import LandingPage from './routes/landing';
 import ErrorPage from './error-page';
 

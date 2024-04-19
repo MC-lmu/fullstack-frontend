@@ -45,7 +45,7 @@ export default function ProjectList() {
               <CardMedia
                 component='img'
                 sx={{ maxWidth: 256, maxHeight: 100,  }}
-                image='/gcph1024.png'
+                image={project.thumbnail_url}
                 alt={`Photo du projet '${project.title}'`}
               />
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -54,7 +54,7 @@ export default function ProjectList() {
                     {project.title}
                   </Typography>
                   <Typography style={theme.typography.h7}>
-                    {project.short_description}
+                    {project.intro}
                   </Typography>
                 </CardContent>
               </Box>
