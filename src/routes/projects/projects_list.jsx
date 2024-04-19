@@ -31,7 +31,14 @@ export default function ProjectList() {
         component={Link}
         variant='contained'
         to='/project/edit/new'
-        sx={{ display: 'block', width:'60%', margin:'auto', textAlign: 'center' }}
+        sx={{
+          display: 'block',
+          width:'60%',
+          margin:'auto',
+          textAlign: 'center',
+          marginTop: 1,
+          marginBottom: 1,
+        }}
       >
         Créer un nouveau projet
       </Button>
@@ -59,7 +66,7 @@ export default function ProjectList() {
                 </CardContent>
               </Box>
               <Box sx={{ ml: 'auto', alignContent: 'center' }}>
-                <IconButton component={Link} to={`/project/${project.id}`}>
+                <IconButton color='primary' component={Link} to={`/project/${project.id}`}>
                   <MenuBookIcon />
                 </IconButton>
 
@@ -73,7 +80,9 @@ export default function ProjectList() {
                   )) {
                     deleteProject(project.id).then(window.location.reload());
                   }
-                }}>
+                }}
+                color='error'
+                >
                   <DeleteIcon />
                 </IconButton>
               </Box>
