@@ -1,15 +1,18 @@
 /* eslint-disable no-unused-vars */
 import { createTheme } from '@mui/material/styles';
-import { deepPurple, green, red } from '@mui/material/colors';
+import { green, lime, red, cyan } from '@mui/material/colors';
 
 // Create a theme instance.
 const theme = createTheme({
   palette: {
     primary: {
-      main: deepPurple[700],
+      main: cyan[800],
     },
     secondary: {
-      main: green[400],
+      main: lime[300],
+    },
+    success: {
+      main: green[900]
     },
     error: {
       main: red.A400,
