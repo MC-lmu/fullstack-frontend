@@ -65,7 +65,7 @@ export default function DynamicTextfieldList({
               error={!!assertLen(itemValue)}
               helperText={assertLen(itemValue)}
             />
-            <IconButton onClick={() => removeItem(itemIndex)}>
+            <IconButton color='error' onClick={() => removeItem(itemIndex)}>
               <DeleteIcon />
             </IconButton>
           </Box>
