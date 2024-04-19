@@ -18,6 +18,7 @@ import '@fontsource/roboto/700.css';
 import Root from './routes/root';
 import ProjectEditionPage, { loader as projectEditLoader, action as projectEditAction } from './routes/projects/project_edition';
 import ProjectsListPage, { loader as projectsListLoader } from './routes/projects/projects_list';
+import AnalyticsPage, { loader as analyticsLoader } from './routes/admin/analytics';
 import ProjectPage, { loader as projectLoader } from './routes/projects/project_page';
 import LandingPage from './routes/landing';
 import ErrorPage from './error-page';
@@ -32,6 +33,11 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
           { index: true, element: <LandingPage /> },
+          {
+            path: '/admin',
+            element: <AnalyticsPage />,
+            loader: analyticsLoader
+          },
           {
             path: '/projects',
             element: <ProjectsListPage />,
