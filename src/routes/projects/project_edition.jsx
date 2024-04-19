@@ -187,7 +187,12 @@ export default function ProjectEditionPage() {
           />
 
           <br />
-          <Button variant='contained' type='submit' startIcon={<SaveIcon />}>
+          <Button
+            type='submit'
+            variant='contained'
+            sx={{ marginBottom: 2 }}
+            startIcon={<SaveIcon />}
+          >
             {creating ? 'Enregister le projet'
               : 'Mettre à jour le projet'
             }
@@ -195,8 +200,9 @@ export default function ProjectEditionPage() {
         </Stack>
       </Form>
 
+      <hr width='85%'/>
       <h1 style={{textAlign: 'center'}}>Aperçu en direct:</h1>
-      <hr width='60%' />
+      <hr width='60%'/>
       <Project
         title={title}
         intro={intro}
