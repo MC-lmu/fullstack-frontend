@@ -45,17 +45,19 @@ export async function action({ request, params }) {
 
   const projectData = {
     'title': formData.get('title'),
-    'short_description': formData.get('intro'),
-    'full_description': formData.get('full_description'),
+    'intro': formData.get('intro'),
+    'description': formData.get('description'),
+    'thumbnail_url': formData.get('thumbnail_url'),
     'keywords': keywords,
     'illustration_urls': illust_img,
   };
+
+  console.log(JSON.stringify(projectData));
 
   if (method == 'POST') { /* Creating a new project */
     const newProjectId = await createProject(projectData);
     return redirect(`/project/${newProjectId}`);
   } else { /* Updating existing project */
-    console.log('updating project ' + params.id);
     await updateProject(params.id, projectData);  
     return redirect(`/project/${params.id}`);
   }
@@ -74,9 +76,11 @@ function unpackProjectDetails(creating, projectDetails) {
   
   return {
     'title': '',
-    'short_description': '',
-    'full_description': '',
-    'keywords': []
+    'intro': '',
+    'description': '',
+    'thumbnail_url': '',
+    'keywords': [],
+    'illustration_urls': []
   };
 }
 
@@ -156,7 +160,7 @@ export default function ProjectEditionPage() {
             margin='dense'
             variant='filled'
             label='Description complète du project'
-            name='full_description'
+            name='description'
             value={fullDescription}
             error={!!fullDescriptionError()}
             helperText={fullDescriptionError()}
