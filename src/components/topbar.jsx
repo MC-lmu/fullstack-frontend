@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
@@ -9,15 +8,14 @@ import Button from '@mui/material/Button';
 import Slide from '@mui/material/Slide';
 import Menu from '@mui/material/Menu';
 
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
+import HomeIcon from '@mui/icons-material/Home';
 
 import PropTypes from 'prop-types';
 
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import theme from '../mui-theme';
+import { useState } from 'react';
 
 function HideOnScroll({ children }) {
   const trigger = useScrollTrigger();
@@ -34,7 +32,7 @@ HideOnScroll.propTypes = {
 };
 
 export default function Topbar(props) {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
   const [accountMenuAnchor, setAccountMenuAnchor] = useState(null);
 
   const navigateToLoginPage = (event) => {
@@ -52,18 +50,30 @@ export default function Topbar(props) {
   return (
     <HideOnScroll {...props}>
       <AppBar
-        position='sticky'
         color='secondary'
+        position='sticky'
         enableColorOnDark
       >
         <Toolbar sx={{ display: 'flex' }}>
-          <Link to='/' style={theme.typography.h3}>
-            Portfolio
-          </Link>
-          {/* TODO: switch to tabs */}
+          <Button
+            disableElevation
+            startIcon={<HomeIcon />}
+            variant='contained'
+            color='success'
+            size='large'
+            component={Link} to='/'
+          >
+            MCPorto
+          </Button>
+          {/* TODO: switch to tabs? */}
           <Button component={Link} to='/projects' sx={{ ml: 'auto' }}>
             Projets
           </Button>
+          {loggedIn && (
+            <Button component={Link} to='/admin' sx={{ ml: 'auto' }}>
+              Administration
+            </Button>
+          )}
 
           {/* TODO: add navigation items */}
           {!loggedIn && (
@@ -82,7 +92,7 @@ export default function Topbar(props) {
               sx={{ ml: 'auto' }}
               onClick={openAccountMenu}
             >
-              <AccountCircle />
+              <AccountCircleIcon />
             </IconButton>
           )}
 
@@ -96,8 +106,11 @@ export default function Topbar(props) {
             open={Boolean(accountMenuAnchor)}
             onClose={closeAccountMenu}  
           >
-            <MenuItem onClick={closeAccountMenu}>Item1</MenuItem>
-            <MenuItem onClick={closeAccountMenu}>Item2</MenuItem>
+            { /* TODO: fetch user info */}
+            <MenuItem onClick={closeAccountMenu} sx={{fontWeight: 'bold'}}>
+              Mathieu CHOPLAIN
+            </MenuItem>
+            <MenuItem onClick={closeAccountMenu}>Déconnexion</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
