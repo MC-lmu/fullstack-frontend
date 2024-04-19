@@ -1,5 +1,5 @@
 
-import { Box, Chip, ImageList, ImageListItem, Stack, Typography } from '@mui/material';
+import { Box, Chip, Divider, ImageList, ImageListItem, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 export default function Project({
@@ -30,7 +30,11 @@ export default function Project({
         </ImageList>
       }
       {keywords.length > 0 &&
-        <Stack direction='row'>
+      <>
+        <Stack
+          direction='row'
+          spacing={1}
+        >
           <Typography>Mots-clés: </Typography>
           {
             keywords.map((kw, idx) => 
@@ -42,6 +46,7 @@ export default function Project({
             )
           }
         </Stack>
+      </>
       }
     </Box>
   );
