@@ -1,19 +1,18 @@
 import { useLoaderData } from 'react-router-dom';
 import { createProject, getProjectDetails, updateProject } from '../../backend_service';
-import { Box, Button, IconButton, TextField } from '@mui/material';
+import { Box, Button, IconButton, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
 import { Form } from 'react-router-dom';
 
-import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import { redirect } from 'react-router-dom';
+import DynamicTextfieldList from '../../components/dynamic_textfield_list';
 
 const MAX_TITLE_LENGTH = 65; //characters
 const MAX_INTRO_LENGTH = 80; //characters
 const MAX_DESCRIPTION_LENGTH = 250; //words
 const MAX_KEYWORDS_NUM = 10;
 const MAX_KEYWORD_LENGTH = 35; //characters
-// eslint-disable-next-line no-unused-vars
 const MAX_ILLUST_NUM = 5;
 
 export async function loader({ params }) {
@@ -111,81 +110,74 @@ export default function ProjectEditionPage() {
     <Box>
       <Form
         method={creating ? 'POST' : 'PATCH'}
-        style={{ margin: 'auto', width: '80%'}}
+        style={{ margin: 'auto', width: '80%', textAlign: 'center'}}
       >
-        <TextField
-          required
-          fullWidth
-          margin='dense'
-          variant='filled'
-          label='Titre du projet'
-          name='title'
-          value={title}
-          error={!!chkStr(title, MAX_TITLE_LENGTH)}
-          helperText={chkStr(title, MAX_TITLE_LENGTH)}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <TextField
-          required
-          fullWidth
-          margin='dense'
-          variant='filled'
-          label='Courte description du projet'
-          name='intro'
-          value={intro}
-          error={!!chkStr(intro, MAX_INTRO_LENGTH)}
-          helperText={chkStr(intro, MAX_INTRO_LENGTH)}
-          onChange={(e) => setIntro(e.target.value)}
-        />
-        <TextField
-          required
-          fullWidth
-          margin='dense'
-          variant='filled'
-          label='Description complète du project'
-          name='full_description'
-          value={fullDescription}
-          error={!!fullDescriptionError()}
-          helperText={fullDescriptionError()}
-          onChange={(e) => setFullDescription(e.target.value)}
-        />
-        {keywords.length > 0 && 
-          keywords.map((keyword, kwIndex) =>
-            <Box key={`kw${kwIndex}_box`} alignItems='center'>
-              <TextField
-                required
-                magin='dense'
-                variant='standard'
-                style={{ width: '85%'}}
-                label={`Mot-clé ${kwIndex + 1}`}
-                value={keyword}
-                name={`keyword_${kwIndex}`}
-                onChange={(e) => setKeywords(keywords.map(
-                  (v, i) => (i === kwIndex)
-                    ? e.target.value
-                    : v)
-                )}
-                error={!!chkStr(keyword, MAX_KEYWORD_LENGTH)}
-                helperText={chkStr(keyword, MAX_KEYWORD_LENGTH)}
-              />
-              <IconButton onClick={() => setKeywords(
-                keywords.filter((_, i) => i !== kwIndex))
-              }>
-                <DeleteIcon />
-              </IconButton>
-            </Box>
-          )
-        }
-        {keywords.length < MAX_KEYWORDS_NUM &&
-          <Button onClick={() => setKeywords(keywords.concat(['']))}>
-            Ajouter un mot-clé
+        <Stack>
+          <TextField
+            required
+            fullWidth
+            margin='dense'
+            variant='filled'
+            label='Titre du projet'
+            name='title'
+            value={title}
+            error={!!chkStr(title, MAX_TITLE_LENGTH)}
+            helperText={chkStr(title, MAX_TITLE_LENGTH)}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+
+          <TextField
+            required
+            fullWidth
+            margin='dense'
+            variant='filled'
+            label='Courte description du projet'
+            name='intro'
+            value={intro}
+            error={!!chkStr(intro, MAX_INTRO_LENGTH)}
+            helperText={chkStr(intro, MAX_INTRO_LENGTH)}
+            onChange={(e) => setIntro(e.target.value)}
+          />
+
+          <TextField
+            required
+            fullWidth
+            margin='dense'
+            variant='filled'
+            label='Description complète du project'
+            name='full_description'
+            value={fullDescription}
+            error={!!fullDescriptionError()}
+            helperText={fullDescriptionError()}
+            onChange={(e) => setFullDescription(e.target.value)}
+          />
+
+          <DynamicTextfieldList 
+            itemName='Mot-clé'
+            collectionName='Mots-clés du project'
+            addItemButtonLabel='Ajouter un mot-clé'
+            itemFormPrefix='keyword'
+            maxItemLength={MAX_KEYWORD_LENGTH}
+            maxItemsCount={MAX_KEYWORDS_NUM}
+            initialArrayContents={prj.keywords}
+          />
+
+          <DynamicTextfieldList
+            itemName="URL de l'image"
+            collectionName="Images d'illustration"
+            addItemButtonLabel="Ajouter une image d'illustration"
+            maxItemsCount={MAX_ILLUST_NUM}
+            maxItemLength={-1}
+            initialArrayContents={[]}
+          />
+
+          <br />
+          <Button variant='contained' type='submit' startIcon={<SaveIcon />}>
+            {creating ? 'Enregister le projet'
+              : 'Mettre à jour le projet'
+            }
           </Button>
-        }
-        <Button variant='contained' type='submit' startIcon={<SaveIcon />}>
-          {creating ? 'Enregister le projet'
-            : 'Mettre à jour le projet'
-          }
-        </Button>
+        </Stack>
       </Form>
       <br />
 
